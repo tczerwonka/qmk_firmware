@@ -1,0 +1,13 @@
+#Sun 24 Jan 2021 04:37:34 PM CST
+#update from upstream:
+git checkout master
+git fetch upstream
+git pull upstream master
+git push origin master
+
+
+#normal push:
+git push --set-upstream origin
+
+
+http://keyboard-layout-editor.com
