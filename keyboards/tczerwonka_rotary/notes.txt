@@ -11,3 +11,16 @@ git push --set-upstream origin
 
 
 http://keyboard-layout-editor.com
+
+#build
+
+
+#program
+Starting with dumbpad code.
+
+    make tczerwonka_rotary:sdrknob
+
+Program with:
+
+    make tczerwonka_rotary:sdrknob:avrdude
+
