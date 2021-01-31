@@ -19,6 +19,8 @@ void keyboard_pre_init_kb(void) {
   // Set the layer LED IO as outputs
   setPinOutput(LAYER_INDICATOR_LED_0);
   setPinOutput(LAYER_INDICATOR_LED_1);
+  setPinOutput(LAYER_INDICATOR_LED_2);
+  setPinOutput(LAYER_INDICATOR_LED_3);
   
   keyboard_pre_init_user();
 }
@@ -27,6 +29,8 @@ void shutdown_user() {
   // Shutdown the layer LEDs
   writePinLow(LAYER_INDICATOR_LED_0);
   writePinLow(LAYER_INDICATOR_LED_1);
+  writePinLow(LAYER_INDICATOR_LED_2);
+  writePinLow(LAYER_INDICATOR_LED_3);
 }
 
 layer_state_t layer_state_set_kb(layer_state_t state) {
@@ -47,15 +51,23 @@ void matrix_init_kb(void) {
   for (int i = 0; i < 2; i++) {
     writePin(LAYER_INDICATOR_LED_0, true);
     writePin(LAYER_INDICATOR_LED_1, false);
-    wait_ms(100);
-    writePin(LAYER_INDICATOR_LED_0, true);
-    writePin(LAYER_INDICATOR_LED_1, true);
+    writePin(LAYER_INDICATOR_LED_2, false);
+    writePin(LAYER_INDICATOR_LED_3, false);
     wait_ms(100);
     writePin(LAYER_INDICATOR_LED_0, false);
     writePin(LAYER_INDICATOR_LED_1, true);
+    writePin(LAYER_INDICATOR_LED_2, false);
+    writePin(LAYER_INDICATOR_LED_3, false);
     wait_ms(100);
     writePin(LAYER_INDICATOR_LED_0, false);
     writePin(LAYER_INDICATOR_LED_1, false);
+    writePin(LAYER_INDICATOR_LED_2, true);
+    writePin(LAYER_INDICATOR_LED_3, false);
+    wait_ms(100);
+    writePin(LAYER_INDICATOR_LED_0, false);
+    writePin(LAYER_INDICATOR_LED_1, false);
+    writePin(LAYER_INDICATOR_LED_2, false);
+    writePin(LAYER_INDICATOR_LED_3, true);
     wait_ms(100);
   }
 

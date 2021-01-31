@@ -51,8 +51,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENCODERS_PAD_B { D1 }
 
 /* LED layer indicators */
-#define LAYER_INDICATOR_LED_0 D4
-#define LAYER_INDICATOR_LED_1 D6
+#define LAYER_INDICATOR_LED_0 C6
+#define LAYER_INDICATOR_LED_1 D4
+#define LAYER_INDICATOR_LED_2 D0
+#define LAYER_INDICATOR_LED_3 D1
 
 /* Bootmagic - hold down rotary encoder pushbutton while plugging in to enter bootloader */
 #define BOOTMAGIC_LITE_ROW 4
