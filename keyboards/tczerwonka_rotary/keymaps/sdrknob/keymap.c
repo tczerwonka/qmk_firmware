@@ -15,65 +15,67 @@
  */
 #include QMK_KEYBOARD_H
 
-#define _BASE     0
-#define _SUB      1
-#define _DBG      2
+#define _BASE   0
+#define _MODE	1
+#define _ZOOM	2
+#define _WSJT	3
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /*
+	_BASE layer
+		mute     / step up / step down / alt-tab
+		SMUTEALL / STEPINC / STEPDEC   / alt-tab
+		S+F9     / S+F16   / S+F17     / A+TAB
   */
   [_BASE] = LAYOUT(
-    	TO(_SUB), KC_A, KC_B, KC_C, KC_D
+    	TO(_MODE), LSFT(KC_F9), LSFT(KC_F16), LSFT(KC_F17), LALT(KC_TAB)
   ),
+
+
+
   /*
-        SUB LAYER
-   /-----------------------------------------------------`
-   |             |         |         |         | Numlock |
-   |             |---------|---------|---------|---------|
-   |             |         |         |         |    -    |
-   |             |---------|---------|---------|---------|
-   |             |         |         |         |    /    |
-   |-------------|---------|---------|---------|---------|
-   |  MO(_DBG)   |         |         |         |    =    |
-   \-----------------------------------------------------'
+	_MODE layer
+		mute     / mode up   / mode down / alt-tab
+		SMUTEALL / SMODENEXT / SMODEPREV / alt-tab
+		S+F9     / S+F14   / S+F15       / A+TAB
   */
-  [_SUB] = LAYOUT(
-    	TO(_BASE), KC_E, KC_F, KC_G, KC_H
+  [_MODE] = LAYOUT(
+    	TO(_ZOOM), LSFT(KC_F9), LSFT(KC_F14), LSFT(KC_F15), LALT(KC_TAB)
   ),
+
+
+
   /*
-        DEBUG LAYER
-   /-----------------------------------------------------`
-   |             |         |         |         |  Reset  |
-   |             |---------|---------|---------|---------|
-   |             |         |         |         |         |
-   |             |---------|---------|---------|---------|
-   |             |         |         |         |         |
-   |-------------|---------|---------|---------|---------|
-   |             |         |         |         |         |
-   \-----------------------------------------------------'
+	_ZOOM layer	
+		mute     / zoom up   / zoom down / pan center
+		SMUTEALL / PANBW_UP  / PANBW_DOWN / PANCENTER
+		S+F9     / S+F10     / S+F11       / S+F13
   */
-  [_DBG] = LAYOUT(
-         _______,     _______,     _______,     _______,      RESET
+  [_ZOOM] = LAYOUT(
+    	TO(_WSJT), LSFT(KC_F9), LSFT(KC_F10), LSFT(KC_F11), LSFT(KC_F13)
   ),
+
+
+
+  /*
+	_WSJT layer	
+		mute     / enable tx / erase / halt tx
+		S+F9     / ALT+N     / ALT+E / ALT+H
+  */
+  [_WSJT] = LAYOUT(
+    	TO(_BASE), LSFT(KC_F9), LALT(KC_N), LALT(KC_E), LALT(KC_H)
+  ),
+
+
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  // If console is enabled, it will print the matrix position and status of each key pressed
-/*
-#ifdef CONSOLE_ENABLE
-    uprintf("KL: kc: %u, col: %u, row: %u, pressed: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed);
-#endif 
-*/
   return true;
 }
 
 void keyboard_post_init_user(void) {
-  // Customise these values to desired behaviour
-  //debug_enable = true;
-  //debug_matrix = true;
-  //debug_keyboard = true;
-  //debug_mouse = true;
+
 }
 
 void matrix_init_user(void) {
@@ -84,26 +86,20 @@ void matrix_init_user(void) {
 // OLED Driver Logic
 #ifdef OLED_DRIVER_ENABLE
 
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-  if (!is_keyboard_master())
-    return OLED_ROTATION_180;  // flip 180 for offhand
-  return rotation;
-}
-
 
 void oled_task_user(void) {
-    // Host Keyboard Layer Status
-    oled_write_P(PSTR("Layer: "), false);
-
     switch (get_highest_layer(layer_state)) {
         case _BASE:
-            oled_write_P(PSTR("Default\n"), false);
+            oled_write_P(PSTR("Mute\nStep UP\nStep Down\nALT-TAB\n"), false);
             break;
-        case _SUB:
-            oled_write_P(PSTR("FN\n"), false);
+        case _MODE:
+            oled_write_P(PSTR("Mute\nMode UP\nMode Down\nALT-TAB\n"), false);
             break;
-        case _DBG:
-            oled_write_P(PSTR("ADJ\n"), false);
+        case _ZOOM:
+            oled_write_P(PSTR("Mute\nPan out\nPan in\nPan center\n"), false);
+            break;
+        case _WSJT:
+            oled_write_P(PSTR("Mute\nEnable TX\nErase\nHalt TX\n"), false);
             break;
         default:
             // Or use the write_ln shortcut over adding '\n' to the end of your string
@@ -111,10 +107,10 @@ void oled_task_user(void) {
     }
 
     // Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
-    oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
-    oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+    // led_t led_state = host_keyboard_led_state();
+    // oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
+    // oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
+    // oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
 }
 
 #endif
@@ -144,7 +140,6 @@ void encoder_update_user(uint8_t index, bool clockwise) {
   if (index == 0) {
     switch (biton32(layer_state)) {
       case _BASE:
-        // main layer - volume up (CW) and down (CCW)
         if (clockwise) {
           tap_code(KC_MS_WH_UP);
         } else {
@@ -152,30 +147,21 @@ void encoder_update_user(uint8_t index, bool clockwise) {
         }
         break;
 
-      case _SUB:
-        // sub layer - next track (CW) and previous track (CCW)
+      //in WSJT -- turn the knob off
+      case _WSJT:
         if (clockwise) {
-          tap_code(KC_MNXT);
+          tap_code(KC_NO);
         } else {
-          tap_code(KC_MPRV);
-        }
-        break;
-
-      case _DBG:
-        // debug layer - brightness up (CW) and brightness down (CCW)
-        if (clockwise) {
-          tap_code(KC_BRIU);
-        } else {
-          tap_code(KC_BRID);
+          tap_code(KC_NO);
         }
         break;
 
       default:
         // any other layer (shouldn't exist..) - volume up (CW) and down (CCW)
         if (clockwise) {
-          tap_code(KC_VOLU);
+          tap_code(KC_MS_WH_UP);
         } else {
-          tap_code(KC_VOLD);
+          tap_code(KC_MS_WH_DOWN);
         }
         break;   
     }
