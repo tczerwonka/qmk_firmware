@@ -50,6 +50,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENCODERS_PAD_A { B5 }
 #define ENCODERS_PAD_B { B4 }
 
+//mine is 128x64 but the x32 gives larger fonts for now
+/* #define OLED_DISPLAY_128X64  */
+
 /* LED layer indicators */
 #define LAYER_INDICATOR_LED_0 E6
 #define LAYER_INDICATOR_LED_1 D7
@@ -57,8 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Bootmagic - hold down rotary encoder pushbutton while plugging in to enter bootloader */
 #define BOOTMAGIC_LITE_ROW 0
 #define BOOTMAGIC_LITE_COLUMN 0
-
-#define OLED_FONT_H "lib/glcdfont.h"
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
 #define DEBOUNCE 5

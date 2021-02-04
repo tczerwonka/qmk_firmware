@@ -14,9 +14,9 @@ BOOTLOADER = caterina
 # Build Options
 #   change yes to no to disable
 #
-LTO_ENABLE = yes
+#LTO_ENABLE plays havoc with the OLED at the cost of 6% more memory
+#LTO_ENABLE = yes
 OLED_DRIVER_ENABLE = yes	#enable the OLED display
-OLED_DISPLAY_128X64 = yes
 BOOTMAGIC_ENABLE = lite      # Virtual DIP switch configuration
 MOUSEKEY_ENABLE = yes       # Mouse keys
 EXTRAKEY_ENABLE = yes       # Audio control and System control
