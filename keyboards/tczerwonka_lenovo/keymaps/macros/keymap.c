@@ -17,6 +17,8 @@
 
 #define _BASE 0
 #define _SUB  1
+#define _GIT  1
+#define _JUNOS  2
 
 enum custom_keycodes {
   GIT_PULL = SAFE_RANGE,
@@ -29,9 +31,10 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /*
         BASE LAYER
+        replaced KC_SLASH with RESET
   */
   [_BASE] = LAYOUT(
-                   TO(_SUB),  KC_SLASH, S(KC_8),  KC_NO, 
+                   TO(_GIT),  RESET, S(KC_8),  KC_NO, 
                    KC_7,      KC_8,     KC_9,     S(KC_EQUAL), 
                    KC_4,      KC_5,     KC_6,     KC_NO, 
                    KC_1,      KC_2,     KC_3,     KC_ENTER, 
@@ -39,15 +42,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                    KC_NO,     KC_NO,    KC_MINUS, KC_NO
   ),
   /*
-        SUB LAYER
+        GIT LAYER
   */
-  [_SUB] = LAYOUT(
-                 TO(_BASE),   RESET,       KC_A,      KC_NO, 
-                 _______,     _______,     _______,      KC_KP_PLUS, 
-                 GIT_STATUS,  GIT_DIFF,     _______,      KC_KP_MINUS, 
-                 GIT_PULL,    GIT_PUSH,    GIT_COMMIT,      KC_TRNS,
-                 _______,     _______,     _______,      KC_EQL,
-                 _______,     _______,     _______,      KC_EQL
+  [_GIT] = LAYOUT(
+                 TO(_JUNOS),   RESET,       KC_NO,      KC_NO, 
+                 KC_NO,     KC_NO,     KC_NO,      KC_KP_PLUS, 
+                 GIT_STATUS,  GIT_DIFF,     KC_NO,      KC_KP_MINUS, 
+                 GIT_PULL,    GIT_PUSH,    GIT_COMMIT,      KC_ENTER,
+                 KC_NO,     KC_NO,     KC_NO,      KC_NO,
+                 KC_NO,     KC_NO,     KC_NO,      KC_NO
+  ),
+  /*
+        JUNOS LAYER
+  */
+  [_JUNOS] = LAYOUT(
+                 TO(_BASE),   RESET,       KC_NO,      KC_NO, 
+                 KC_NO,     KC_NO,     KC_NO,      KC_NO, 
+                 KC_NO,     KC_NO,     KC_NO,      KC_NO, 
+                 COMMIT_CHECK,     SHOW_COMPARE,     KC_NO,      KC_ENTER,
+                 KC_NO,     KC_NO,     KC_NO,      KC_NO,
+                 KC_NO,     KC_NO,     KC_NO,      KC_NO
   ),
 };
 
