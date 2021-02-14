@@ -35,6 +35,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 
+// Layer LEDs act as binary indication of current layer
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+    case _BASE:
+	writePinLow(PLEX_LED_0);
+	writePinHigh(PLEX_LED_2);
+        break;
+    case _SECOND:
+	writePinLow(PLEX_LED_2);
+	writePinHigh(PLEX_LED_0);
+        break;
+    default: //  for any other layers, or the default layer
+	writePinLow(PLEX_LED_2);
+	writePinLow(PLEX_LED_0);
+        break;
+    }
+  return state;
+}
+
+
+
 // LED initialization
 void matrix_init_kb(void) {
 	setPinOutput(PLEX_LED_0);
