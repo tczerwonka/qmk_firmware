@@ -7,6 +7,11 @@
 #define _BASE 0
 #define _SECOND 1
 
+#define PLEX_LED_0	D7
+#define PLEX_LED_1	E6
+#define PLEX_LED_2	B4
+#define PLEX_LED_3	B5
+
 enum custom_keycodes {
   FFS = SAFE_RANGE,
   COMMIT_CHECK,
@@ -27,6 +32,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         FFS, COMMIT_CHECK, SHOW_COMPARE, KC_EQL
     )
 };
+
+
+
+// LED initialization
+void matrix_init_kb(void) {
+	setPinOutput(PLEX_LED_0);
+	setPinOutput(PLEX_LED_1);
+	setPinOutput(PLEX_LED_2);
+	setPinOutput(PLEX_LED_3);
+
+	//second LED
+	//wait_ms(100);
+	//writePinHigh(PLEX_LED_0);
+	//wait_ms(500);
+	//writePinLow(PLEX_LED_0);
+
+	//first LED
+	//wait_ms(200);
+	//writePinHigh(PLEX_LED_2);
+	//wait_ms(500);
+	//writePinLow(PLEX_LED_2);
+
+	//cycle through LEDs on init
+	for (int a = 0; a < 4; a++) {
+		writePinHigh(PLEX_LED_2);
+		wait_ms(50);
+		writePinHigh(PLEX_LED_0);
+		wait_ms(50);
+		writePinLow(PLEX_LED_2);
+		wait_ms(50);
+		writePinLow(PLEX_LED_0);
+		wait_ms(100);
+	}
+	matrix_init_user();
+}
+
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
