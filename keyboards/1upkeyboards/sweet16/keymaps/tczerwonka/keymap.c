@@ -1,6 +1,4 @@
-/* a crazy use of hardware */
 /* make 1upkeyboards/sweet16/v1:tczerwonka:avrdude */
-
 
 #include QMK_KEYBOARD_H
 
@@ -20,6 +18,8 @@ enum custom_keycodes {
   GIT_COMMIT,
   SIG1,
   MU,
+  FLIP,
+  SHRUG,
   OMEGA
 };
 
@@ -41,8 +41,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_UTILITY] = LAYOUT_ortho_4x4(
         MU,		OMEGA,   	SIG1,		TO(_HAM),
         GIT_DIFF, 	GIT_COMMIT,  	GIT_PUSH,	GIT_PULL,
-        KC_NO, 	KC_NO,   	KC_NO,		KC_NO,
-        KC_NO, 	KC_NO, 		KC_NO,		KC_ENT
+        FLIP, 		SHRUG,		UC(0x223F),	UC(0x2213),
+        UC(0x2218), 	UC(0x2205),	UC(0X2260),	KC_ENT
     )
 };
 
@@ -132,19 +132,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case MU:
             if (record->event.pressed) {
-                SEND_STRING("μ");
+                send_unicode_string("μ");
             }
             return false;
             break;
         case OMEGA:
             if (record->event.pressed) {
-                SEND_STRING("Ω");
+                send_unicode_string("Ω");
             }
             return false;
             break;
         case SIG1:
             if (record->event.pressed) {
                 SEND_STRING("Tim Czerwonka\n608-239-3696 (c)\n");
+            }
+            return false;
+            break;
+        case FLIP:
+            if (record->event.pressed) {
+		send_unicode_string("(ノಠ痊ಠ)ノ彡┻━┻");
+            }
+            return false;
+            break;
+        case SHRUG:
+            if (record->event.pressed) {
+		send_unicode_string("¯\\_(ツ)_/¯");
             }
             return false;
             break;
