@@ -1,12 +1,12 @@
 /* a crazy use of hardware */
-/* make 1upkeyboards/sweet16/v1:m7h:avrdude */
+/* make 1upkeyboards/sweet16/v1:tczerwonka:avrdude */
 
 
 #include QMK_KEYBOARD_H
 
-#define _BASE 	0
-#define _OTHER 	1
-#define _V6 	2
+#define _HAM 		0
+#define _KEYPAD 	1
+#define _UTILITY	2
 
 #define PLEX_LED_0	D7
 #define PLEX_LED_1	E6
@@ -14,38 +14,34 @@
 #define PLEX_LED_3	B5
 
 enum custom_keycodes {
-  FFS = SAFE_RANGE,
-  COMMIT_CHECK,
-  SHOW_COMPARE,
-  GIT_DIFF,
-  GIT_ADD,
+  GIT_DIFF = SAFE_RANGE,
+  GIT_PULL,
   GIT_PUSH,
   GIT_COMMIT,
-  COLON_COLON,
-  ONETWENTYSEVEN,
-  OHFFS
+  MU,
+  OMEGA
 };
 
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [_BASE] = LAYOUT_ortho_4x4(
-        KC_7, KC_8,   KC_9,   TO(_OTHER),
+    [_HAM] = LAYOUT_ortho_4x4(
+        LSFT(KC_F16),	LSFT(KC_F10),  	KC_VOLU,   	TO(_KEYPAD),
+        LSFT(KC_F17), 	LSFT(KC_F11),  	KC_VOLD,   	LSFT(KC_F9),
+        LALT(KC_N), 	LSFT(KC_F13),  	LSFT(KC_F14),  	A(KC_TAB),
+        LALT(KC_H), 	LALT(KC_E), 	LSFT(KC_F15), 	LALT(KC_N)	
+    ),
+    [_KEYPAD] = LAYOUT_ortho_4x4(
+        KC_7, KC_8,   KC_9,   TO(_UTILITY),
         KC_4, KC_5,   KC_6,   KC_SLSH,
         KC_1, KC_2,   KC_3,   KC_PLUS,
         KC_0, KC_DOT, KC_MINS, KC_ENT
     ),
-    [_OTHER] = LAYOUT_ortho_4x4(
-        FFS, 		OHFFS,   	KC_NO,   	TO(_V6),
-        A(KC_TAB), 	KC_VOLD,   	KC_VOLU,   	KC_MUTE,
-        GIT_DIFF, 	GIT_ADD,   	GIT_COMMIT,   	GIT_PUSH,
-        KC_SPACE, 	COMMIT_CHECK, 	SHOW_COMPARE, 	KC_ENT
-    ),
-    [_V6] = LAYOUT_ortho_4x4(
-        KC_7, 	KC_8,   	KC_9,		TO(_BASE),
-        KC_4, 	KC_5,   	KC_6,		ONETWENTYSEVEN,
-        KC_1, 	KC_2,   	KC_3,		KC_SLSH,
-        KC_0, 	S(KC_SCOLON), 	COLON_COLON,	KC_ENT
+    [_UTILITY] = LAYOUT_ortho_4x4(
+        MU,		OMEGA,   	SIG1,		TO(_HAM),
+        GIT_DIFF, 	GIT_COMMIT,  	GIT_PUSH,	GIT_PULL,
+        KC_NO, 	KC_NO,   	KC_NO,		KC_NO,
+        KC_NO, 	KC_NO, 		KC_NO,		KC_ENT
     )
 };
 
@@ -54,11 +50,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Layer LEDs act as binary indication of current layer
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
-    case _OTHER:
+    case _KEYPAD:
 	writePinLow(PLEX_LED_0);
 	writePinHigh(PLEX_LED_2);
         break;
-    case _V6:
+    case _UTILITY:
 	writePinLow(PLEX_LED_2);
 	writePinHigh(PLEX_LED_0);
         break;
@@ -109,45 +105,6 @@ void matrix_init_kb(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case FFS:
-            if (record->event.pressed) {
-                SEND_STRING("ffs ");
-            }
-            return false;
-            break;
-        case OHFFS:
-            if (record->event.pressed) {
-                SEND_STRING("oh ffs ");
-            }
-            return false;
-            break;
-
-        case COMMIT_CHECK:
-            if (record->event.pressed) {
-                SEND_STRING("commit check");
-            }
-            return false;
-            break;
-        case SHOW_COMPARE:
-            if (record->event.pressed) {
-                SEND_STRING("show | compare\n");
-            }
-            return false;
-            break;
-
-        case COLON_COLON:
-            if (record->event.pressed) {
-                SEND_STRING("::");
-            }
-            return false;
-            break;
-        case ONETWENTYSEVEN:
-            if (record->event.pressed) {
-                SEND_STRING("/127");
-            }
-            return false;
-            break;
-
         case GIT_COMMIT:
             if (record->event.pressed) {
                 SEND_STRING("git commit -m \"");
@@ -160,15 +117,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
-        case GIT_ADD:
+        case GIT_PULL:
             if (record->event.pressed) {
-                SEND_STRING("git add ");
+                SEND_STRING("git pull\n");
             }
             return false;
             break;
         case GIT_DIFF:
             if (record->event.pressed) {
                 SEND_STRING("git diff\n");
+            }
+            return false;
+            break;
+        case MU:
+            if (record->event.pressed) {
+                SEND_STRING("mu");
+            }
+            return false;
+            break;
+        case OMEGA:
+            if (record->event.pressed) {
+                SEND_STRING("omega");
             }
             return false;
             break;
