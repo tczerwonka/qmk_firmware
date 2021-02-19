@@ -18,6 +18,7 @@ enum custom_keycodes {
   GIT_PULL,
   GIT_PUSH,
   GIT_COMMIT,
+  SIG1,
   MU,
   OMEGA
 };
@@ -131,13 +132,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case MU:
             if (record->event.pressed) {
-                SEND_STRING("mu");
+                SEND_STRING("μ");
             }
             return false;
             break;
         case OMEGA:
             if (record->event.pressed) {
-                SEND_STRING("omega");
+                SEND_STRING("Ω");
+            }
+            return false;
+            break;
+        case SIG1:
+            if (record->event.pressed) {
+                SEND_STRING("Tim Czerwonka\n608-239-3696 (c)\n");
             }
             return false;
             break;
