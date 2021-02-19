@@ -1,3 +1,6 @@
+/* T Czerwonka WO9U - 1upkeyboards sweet16 macropad */
+/* configuration for ham use and some other stuff   */
+
 /* make 1upkeyboards/sweet16/v1:tczerwonka:avrdude */
 
 #include QMK_KEYBOARD_H
@@ -24,7 +27,7 @@ enum custom_keycodes {
 };
 
 
-
+/* base layer */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_HAM] = LAYOUT_ortho_4x4(
         LSFT(KC_F16),	LSFT(KC_F10),  	KC_VOLU,   	TO(_KEYPAD),
@@ -32,12 +35,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LALT(KC_N), 	LSFT(KC_F13),  	LSFT(KC_F14),  	A(KC_TAB),
         LALT(KC_H), 	LALT(KC_E), 	LSFT(KC_F15), 	LALT(KC_N)	
     ),
+/* second layer -- mostly a standard numeric keypad */
     [_KEYPAD] = LAYOUT_ortho_4x4(
         KC_7, KC_8,   KC_9,   TO(_UTILITY),
         KC_4, KC_5,   KC_6,   KC_SLSH,
         KC_1, KC_2,   KC_3,   KC_PLUS,
         KC_0, KC_DOT, KC_MINS, KC_ENT
     ),
+/* third layer -- some macros and unicode entries */
     [_UTILITY] = LAYOUT_ortho_4x4(
         MU,		OMEGA,   	SIG1,		TO(_HAM),
         GIT_DIFF, 	GIT_COMMIT,  	GIT_PUSH,	GIT_PULL,
@@ -49,6 +54,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 // Layer LEDs act as binary indication of current layer
+// with two LEDs and opposite polarities this could be
+// a charlieplexed sort of arrangement
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
     case _KEYPAD:
@@ -164,6 +171,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
+//not used but a possibility with the extra pins
 #ifdef ENCODER_ENABLE
 #include "encoder.h"
 void encoder_update_user(int8_t index, bool clockwise) {
